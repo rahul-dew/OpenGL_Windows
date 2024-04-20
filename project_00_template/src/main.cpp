@@ -30,7 +30,7 @@ int main(void)
 	//glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 5);
 	//glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE); //you might want to do this when testing the game for shipping
 
-	GLFWwindow *window = window = glfwCreateWindow(SCR_WIDTH, SCR_HEIGHT, "Open GL", NULL, NULL);
+	GLFWwindow *window = window = glfwCreateWindow(SCR_WIDTH, SCR_HEIGHT, "OpenGL", NULL, NULL);
 	if (!window)
 	{
 		glfwTerminate();
