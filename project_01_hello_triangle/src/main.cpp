@@ -13,6 +13,7 @@ extern "C"
 }
 
 static void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods);
+static void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 
 const GLint SCR_WIDTH = 800, SCR_HEIGHT = 600;
 
@@ -37,11 +38,16 @@ int main(void)
 		return -1;
 	}
 
+	int bufferWidth = 0, bufferHeight = 0;
+	glfwGetFramebufferSize(window, &bufferWidth, &bufferHeight);
+	glfwMakeContextCurrent(window);
+	glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
 	glfwSetKeyCallback(window, key_callback);
 
-	glfwMakeContextCurrent(window);
 	gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
 	glfwSwapInterval(1);
+
+	glViewport(0, 0, bufferWidth, bufferHeight);
 
 #pragma region report opengl errors to std
 	glEnable(GL_DEBUG_OUTPUT);
@@ -51,32 +57,51 @@ int main(void)
 #pragma endregion
 
 	//shader loading example
-	Shader s;
-	s.loadShaderProgramFromFile(RESOURCES_PATH "vertex.vert", RESOURCES_PATH "fragment.frag");
-	s.bind();
+	Shader shader;
+	shader.loadShaderProgramFromFile(RESOURCES_PATH "vertex.vert", RESOURCES_PATH "fragment.frag");
 
+	//set up vertex data (and buffer(s)) and configure vertex attributes
+	float vertices[] = {
+		-0.5f, -0.5f, 0.0f,
+		0.5f, -0.5f, 0.0f,
+		0.0f, 0.5f, 0.0f
+	};
+	unsigned int VBO, VAO;
+	//bind the vertex array object first, then bind and set vertex buffer(s)
+	//then configure vertex attribute(s)
+	glGenVertexArrays(1, &VAO);
+	glBindVertexArray(VAO);
+
+	glGenBuffers(1, &VBO);
+	glBindBuffer(GL_ARRAY_BUFFER, VBO);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+	glEnableVertexAttribArray(0);
+
+	//unbind
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+	glBindVertexArray(0);
+
+	//render loop
 	while (!glfwWindowShouldClose(window))
 	{
-		int width = 0, height = 0;
-
-		glfwGetFramebufferSize(window, &width, &height);
-		glViewport(0, 0, width, height);
+		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT);
 
-		//I'm using the old pipeline here just to test, you shouldn't learn this,
-		//Also It might not work on apple
-		glBegin(GL_TRIANGLES);
-		glColor3f(1, 0, 0);
-		glVertex2f(0, 1);
-		glColor3f(0, 1, 0);
-		glVertex2f(1, -1);
-		glColor3f(0, 0, 1);
-		glVertex2f(-1, -1);
-		glEnd();
+		//draw triangle
+		shader.bind();
+		glBindVertexArray(VAO);
+		glDrawArrays(GL_TRIANGLES, 0, 3);
 
 		glfwSwapBuffers(window);
 		glfwPollEvents();
 	}
+
+	//cleaning
+	//glDeleteVertexArrays(1, &VAO);
+	//glDeleteBuffers(1, &VBO);
+	//shader.clear();
 
 	//there is no need to call the clear function for the libraries since the os will do that for us.
 	//by calling this functions we are just wasting time.
@@ -89,4 +114,9 @@ static void key_callback(GLFWwindow* window, int key, int scancode, int action, 
 {
 	if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
 		glfwSetWindowShouldClose(window, GLFW_TRUE);
+}
+
+void framebuffer_size_callback(GLFWwindow* window, int width, int height)
+{
+	glViewport(0, 0, width, height);
 }
