@@ -12,3 +12,6 @@ Run using ctrl+F5 or play button in debug menu.
 
 ## Projects
 1. hello_triangle
+2. draw_rectangle
+3. draw_circle
+4. draw_ring
