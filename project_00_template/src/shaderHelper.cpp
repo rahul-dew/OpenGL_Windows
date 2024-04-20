@@ -1,4 +1,4 @@
-#include <demoShader.h>
+#include <shaderHelper.h>
 #include <iostream>
 #include <fstream>
 

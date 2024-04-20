@@ -2,9 +2,8 @@
 #define GLFW_INCLUDE_NONE
 #include <GLFW/glfw3.h>
 #include <openglDebug.h>
-#include <demoShader.h>
+#include <shaderHelper.h>
 #include <iostream>
-
 
 #define USE_GPU_ENGINE 0
 extern "C"
@@ -13,32 +12,25 @@ extern "C"
 	__declspec(dllexport) int AmdPowerXpressRequestHighPerformance = USE_GPU_ENGINE;
 }
 
+static void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods);
 
-static void key_callback(GLFWwindow *window, int key, int scancode, int action, int mods)
-{
-	if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
-		glfwSetWindowShouldClose(window, GLFW_TRUE);
-}
+const GLint SCR_WIDTH = 800, SCR_HEIGHT = 600;
 
 int main(void)
 {
-
 	if (!glfwInit())
 		return -1;
-
 
 #pragma region report opengl errors to std
 	//enable opengl debugging output.
 	glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, true);
 #pragma endregion
 
-
 	//glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
 	//glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 5);
 	//glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE); //you might want to do this when testing the game for shipping
 
-
-	GLFWwindow *window = window = glfwCreateWindow(640, 480, "Simple example", NULL, NULL);
+	GLFWwindow* window = window = glfwCreateWindow(SCR_WIDTH, SCR_HEIGHT, "Open GL", NULL, NULL);
 	if (!window)
 	{
 		glfwTerminate();
@@ -50,7 +42,6 @@ int main(void)
 	glfwMakeContextCurrent(window);
 	gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
 	glfwSwapInterval(1);
-
 
 #pragma region report opengl errors to std
 	glEnable(GL_DEBUG_OUTPUT);
@@ -76,11 +67,11 @@ int main(void)
 		//Also It might not work on apple
 		glBegin(GL_TRIANGLES);
 		glColor3f(1, 0, 0);
-		glVertex2f(0,1);
+		glVertex2f(0, 1);
 		glColor3f(0, 1, 0);
-		glVertex2f(1,-1);
+		glVertex2f(1, -1);
 		glColor3f(0, 0, 1);
-		glVertex2f(-1,-1);
+		glVertex2f(-1, -1);
 		glEnd();
 
 		glfwSwapBuffers(window);
@@ -92,4 +83,10 @@ int main(void)
 	//glfwDestroyWindow(window);
 	//glfwTerminate();
 	return 0;
+}
+
+static void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
+{
+	if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
+		glfwSetWindowShouldClose(window, GLFW_TRUE);
 }
