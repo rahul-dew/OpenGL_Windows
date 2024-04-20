@@ -16,3 +16,5 @@ add_subdirectory(libs_thirdparty/imgui-docking)			#ui
 add_subdirectory(project_00_template)
 add_subdirectory(project_01_hello_triangle)
 add_subdirectory(project_02_draw_rectangle)
+add_subdirectory(project_03_draw_circle)
+add_subdirectory(project_03_01_draw_ring)
