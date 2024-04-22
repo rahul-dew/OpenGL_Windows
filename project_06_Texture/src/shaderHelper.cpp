@@ -3,7 +3,7 @@
 #include <fstream>
 
 //path is used for error reporting
-GLint createShaderFromData(const char* data, GLenum shaderType, const char* path = 0)
+GLint createShaderFromData(const char *data, GLenum shaderType, const char *path = 0)
 {
 	GLuint shaderId = glCreateShader(shaderType);
 	glShaderSource(shaderId, 1, &data, nullptr);
@@ -14,7 +14,7 @@ GLint createShaderFromData(const char* data, GLenum shaderType, const char* path
 
 	if (!rezult)
 	{
-		char* message = 0;
+		char *message = 0;
 		int   l = 0;
 
 		glGetShaderiv(shaderId, GL_INFO_LOG_LENGTH, &l);
@@ -35,7 +35,7 @@ GLint createShaderFromData(const char* data, GLenum shaderType, const char* path
 		else
 		{
 			if (path) { std::cout << path << " "; }
-			std::cout << "unknown error while compiling shader :(\n";
+			std::cout<< "unknown error while compiling shader :(\n";
 		}
 
 		glDeleteShader(shaderId);
@@ -47,7 +47,7 @@ GLint createShaderFromData(const char* data, GLenum shaderType, const char* path
 	return shaderId;
 }
 
-GLint createShaderFromFile(const char* name, GLenum shaderType)
+GLint createShaderFromFile(const char *name, GLenum shaderType)
 {
 	std::ifstream f(name);
 	std::string str;
@@ -62,22 +62,22 @@ GLint createShaderFromFile(const char* name, GLenum shaderType)
 	str.reserve(f.tellg());
 	f.seekg(0, std::ios::beg);
 
-	if (str.capacity() <= 0)
+	if (str.capacity() <= 0) 
 	{
 		std::cout << "Error opening file: " + std::string(name) << "\n";
-		return 0;
+		return 0; 
 	}
 
 	str.assign((std::istreambuf_iterator<char>(f)),
 		std::istreambuf_iterator<char>());
 
-
+	
 	auto rez = createShaderFromData(str.c_str(), shaderType, name);
 
 	return rez;
 }
 
-bool Shader::loadShaderProgramFromData(const char* vertexShaderData, const char* fragmentShaderData)
+bool Shader::loadShaderProgramFromData(const char *vertexShaderData, const char *fragmentShaderData)
 {
 	auto vertexId = createShaderFromData(vertexShaderData, GL_VERTEX_SHADER);
 	auto fragmentId = createShaderFromData(fragmentShaderData, GL_FRAGMENT_SHADER);
@@ -102,7 +102,7 @@ bool Shader::loadShaderProgramFromData(const char* vertexShaderData, const char*
 
 	if (info != GL_TRUE)
 	{
-		char* message = 0;
+		char *message = 0;
 		int   l = 0;
 
 		glGetProgramiv(id, GL_INFO_LOG_LENGTH, &l);
@@ -125,7 +125,7 @@ bool Shader::loadShaderProgramFromData(const char* vertexShaderData, const char*
 	return true;
 }
 
-bool Shader::loadShaderProgramFromData(const char* vertexShaderData, const char* geometryShaderData, const char* fragmentShaderData)
+bool Shader::loadShaderProgramFromData(const char *vertexShaderData, const char *geometryShaderData, const char *fragmentShaderData)
 {
 	auto vertexId = createShaderFromData(vertexShaderData, GL_VERTEX_SHADER);
 	auto geometryId = createShaderFromData(geometryShaderData, GL_GEOMETRY_SHADER);
@@ -153,7 +153,7 @@ bool Shader::loadShaderProgramFromData(const char* vertexShaderData, const char*
 
 	if (info != GL_TRUE)
 	{
-		char* message = 0;
+		char *message = 0;
 		int   l = 0;
 
 		glGetProgramiv(id, GL_INFO_LOG_LENGTH, &l);
@@ -176,7 +176,7 @@ bool Shader::loadShaderProgramFromData(const char* vertexShaderData, const char*
 	return true;
 }
 
-bool Shader::loadShaderProgramFromFile(const char* vertexShader, const char* fragmentShader)
+bool Shader::loadShaderProgramFromFile(const char *vertexShader, const char *fragmentShader)
 {
 
 	auto vertexId = createShaderFromFile(vertexShader, GL_VERTEX_SHADER);
@@ -203,7 +203,7 @@ bool Shader::loadShaderProgramFromFile(const char* vertexShader, const char* fra
 
 	if (info != GL_TRUE)
 	{
-		char* message = 0;
+		char *message = 0;
 		int   l = 0;
 
 		glGetProgramiv(id, GL_INFO_LOG_LENGTH, &l);
@@ -226,7 +226,7 @@ bool Shader::loadShaderProgramFromFile(const char* vertexShader, const char* fra
 	return true;
 }
 
-bool Shader::loadShaderProgramFromFile(const char* vertexShader, const char* geometryShader, const char* fragmentShader)
+bool Shader::loadShaderProgramFromFile(const char *vertexShader, const char *geometryShader, const char *fragmentShader)
 {
 	auto vertexId = createShaderFromFile(vertexShader, GL_VERTEX_SHADER);
 	auto geometryId = createShaderFromFile(geometryShader, GL_GEOMETRY_SHADER);
@@ -254,7 +254,7 @@ bool Shader::loadShaderProgramFromFile(const char* vertexShader, const char* geo
 
 	if (info != GL_TRUE)
 	{
-		char* message = 0;
+		char *message = 0;
 		int   l = 0;
 
 		glGetProgramiv(id, GL_INFO_LOG_LENGTH, &l);
